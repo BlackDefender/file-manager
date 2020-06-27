@@ -18,7 +18,14 @@
                 </td>
                 <td></td>
                 <td></td>
-                <td><button>...</button></td>
+                <td>
+                    <button @click.stop="openMenu(index)" class="open-menu-button">
+                        <EllipsisV class="ellipsis" />
+                    </button>
+                    <div class="menu-container">
+                        <DirectoryEntryMenu :dirent="dirent" :index="index" />
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -26,11 +33,13 @@
 </template>
 
 <script>
+import DirectoryEntryMenu from './DirectoryEntryMenu.vue';
 import FileIcon from '../assets/file.svg';
 import FileImageIcon from '../assets/file-image.svg';
 import FileCodeIcon from '../assets/file-code.svg';
 import FilePdfIcon from '../assets/file-pdf.svg';
 import DirectoryIcon from '../assets/folder.svg';
+import EllipsisV from '../assets/ellipsis-v.svg';
 
 export default {
     name: 'DirectoryContent',
@@ -53,6 +62,10 @@ export default {
         },
         refresh() {
             this.$store.dispatch('loadDirectory');
+        },
+        openMenu(index) {
+            this.$eventBus.emit('closeDirectoryEntryMenu');
+            this.$eventBus.emit('openDirectoryEntryMenu', index);
         },
         resolveIcon(dirent) {
             let icon;
@@ -82,11 +95,13 @@ export default {
         },
     },
     components: {
+        DirectoryEntryMenu,
         FileIcon,
         DirectoryIcon,
         FileImageIcon,
         FileCodeIcon,
         FilePdfIcon,
+        EllipsisV,
     },
 };
 </script>
@@ -117,6 +132,25 @@ export default {
                 }
                 .dirent-name{
                     cursor: pointer;
+                }
+                .menu-container{
+                    position: relative;
+                }
+                .open-menu-button{
+                    border: none;
+                    background-color: transparent;
+                    cursor: pointer;
+                    .ellipsis{
+                        width: 20px;
+                        height: 20px;
+                        color: #a3a3a3;
+                        transition: color 0.3s;
+                    }
+                    &:hover{
+                        .ellipsis{
+                            color: #000000;
+                        }
+                    }
                 }
             }
         }
