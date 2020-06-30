@@ -1,11 +1,13 @@
 <template>
     <div class="file-manager">
         <div class="file-manager__main">
-            <PathComponent></PathComponent>
-            <DirectoryContent></DirectoryContent>
+            <PathComponent/>
+            <DirectoryContent/>
         </div>
-        <DirectoryInfoAndActions></DirectoryInfoAndActions>
-        <Logger></Logger>
+        <DirectoryInfoAndActions/>
+        <Logger/>
+        <TheModalDirectoryCreate/>
+        <TheModalDirentDelete/>
     </div>
 </template>
 
@@ -14,6 +16,8 @@ import PathComponent from '../components/PathComponent.vue';
 import DirectoryContent from '../components/DirectoryContent.vue';
 import DirectoryInfoAndActions from '../components/DirectoryInfoAndActions.vue';
 import Logger from '../components/Logger.vue';
+import TheModalDirectoryCreate from '../components/TheModalDirectoryCreate.vue';
+import TheModalDirentDelete from '../components/TheModalDirentDelete.vue';
 
 export default {
     name: 'FileManager',
@@ -25,6 +29,8 @@ export default {
         DirectoryContent,
         DirectoryInfoAndActions,
         Logger,
+        TheModalDirectoryCreate,
+        TheModalDirentDelete,
     },
 };
 </script>

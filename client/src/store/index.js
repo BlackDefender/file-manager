@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import http from '../plugins/http';
+import modalDirectoryCreate from './modules/modalDirectoryCreate';
+import modalDirentDelete from './modules/modalDirentDelete';
 
 Vue.use(Vuex);
 
@@ -9,6 +11,10 @@ export default new Vuex.Store({
         currentPath: [],
         directoryContent: [],
         search: '',
+    },
+    modules: {
+        modalDirectoryCreate,
+        modalDirentDelete,
     },
     getters: {
         currentPathStr: (state) => state.currentPath.join('/'),
@@ -48,6 +54,17 @@ export default new Vuex.Store({
             context.commit('setCurrentPath', path);
             context.dispatch('loadDirectory');
         },
+        removeDirent(context, dirent) {
+            const path = encodeURIComponent(context.state.currentPath.join('/'));
+            console.log(dirent);
+            http
+                .delete(`directory?path=${path}`)
+                .then((response) => {
+                    console.log(response);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
     },
-    modules: {},
 });

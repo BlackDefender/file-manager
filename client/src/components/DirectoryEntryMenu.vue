@@ -3,16 +3,24 @@
         <li class="dirent-menu__item">Rename</li>
         <li class="dirent-menu__item">Get link</li>
         <li class="dirent-menu__item">Move</li>
-        <li class="dirent-menu__item">Remove</li>
+        <li class="dirent-menu__item" @click="remove">Remove</li>
     </ul>
 </template>
 
 <script>
+import modalData from '../plugins/modalData';
+
 export default {
     name: 'DirectoryEntryMenu',
     props: {
-        dirent: Object,
-        index: Number,
+        dirent: {
+            type: Object,
+            required: true,
+        },
+        index: {
+            type: Number,
+            required: true,
+        },
     },
     data() {
         return {
@@ -35,6 +43,10 @@ export default {
         },
         closeMenu() {
             this.isOpened = false;
+        },
+        async remove() {
+            const { approve } = await modalData('modalDirentDelete');
+            if (!approve) this.$store.dispatch('removeDirent', this.dirent);
         },
     },
 };

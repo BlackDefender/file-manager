@@ -4,20 +4,14 @@ import router from './router';
 import store from './store';
 import http from './plugins/http';
 import eventBus from './plugins/eventBus';
+import modalData from './plugins/modalData';
+import setupAsVuePlugin from './utils/setupAsVuePlugin';
 
 Vue.config.productionTip = false;
 
-Vue.use({
-    install(VueConstructor) {
-        VueConstructor.prototype.$http = http;
-    },
-});
-
-Vue.use({
-    install(VueConstrucor) {
-        VueConstrucor.prototype.$eventBus = eventBus;
-    },
-});
+setupAsVuePlugin('$http', http);
+setupAsVuePlugin('$eventBus', eventBus);
+setupAsVuePlugin('$modalData', modalData);
 
 new Vue({
     router,

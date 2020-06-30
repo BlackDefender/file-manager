@@ -8,6 +8,10 @@ const cors = require('cors');
 
 const config = require('./config.js');
 
+const { requestedPath } = require('./utils/requestedPath');
+const { sendError } = require('./utils/sendError');
+const { sendSuccess } = require('./utils/sendSuccess');
+
 const port = 3000;
 const uploadsDirPath = '../uploads';
 
@@ -18,33 +22,8 @@ app.use(express.json());
 app.use(fileUpload());
 app.use("/", express.static("../client/dist"));
 
-
-const requestedPath = (request) => {
-    let relativePath;
-    if (request.method === 'GET') {
-        relativePath = request.query.path || '';
-    } else {
-        relativePath = request.body.path || '';
-    }
-    return path.resolve(uploadsDirPath,relativePath);
-};
-
-const sendError = (response, err, message) => {
-    const responseObject = { status: 'error' };
-    if (err) responseObject.message = err.message;
-    if (message) responseObject.message = message;
-    response.json(responseObject);
-};
-
-const sendSuccess = (response, data) => {
-    const responseObject = { status: 'success' };
-    if (data) responseObject.data = data;
-    response.json(responseObject);
-}
-
 app.get('/', (request, response) => {
     const indexFilePath = path.resolve('../client/dist/index.html');
-    //console.log(indexFilePath);
     response.sendFile(indexFilePath);
 });
 
@@ -54,7 +33,6 @@ app.get('/', (request, response) => {
 * */
 app.post('/api/directory', (request, response) => {
     const newDirectoryPath = requestedPath(request);
-    console.log(newDirectoryPath);
     fs.mkdir(newDirectoryPath, (err) => {
         if (err) return sendError(response, err);
         sendSuccess(response);
@@ -68,14 +46,7 @@ app.post('/api/directory', (request, response) => {
 app.get('/api/directory', (request, response) => {
     const dirPath = requestedPath(request);
     fs.readdir(dirPath, {withFileTypes: true}, (err, files) => {
-        if (err) {
-            response.json({
-                status: 'error',
-                data: [],
-                message: err.message,
-            });
-            return;
-        }
+        if (err) return sendError(response, err);
         const dir = files
             .map((dirent) => {
                 const dirItem = {
@@ -142,7 +113,7 @@ app.post('/api/file/remote-upload', (request, response) => {
         })
             .then(function (response) {
                 const contentType = response.headers['content-type'];
-                if (config.mimeTypesAllowedForDownload.includes(contentType)) {
+                if (config.allowedMimeTypes.includes(contentType)) {
                     const filePath = path.resolve(uploadsDirPath, 'ada_lovelace.jpg');
                     try {
                         response.data.pipe(fs.createWriteStream(filePath));

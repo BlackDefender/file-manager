@@ -11,6 +11,8 @@ import http from '../plugins/http';
 import config from '../config';
 import processResponse from '../utils/processResponse';
 
+import modalData from '../plugins/modalData';
+
 export default {
     name: 'DirectoryInfoAndActions',
     computed: {
@@ -19,10 +21,10 @@ export default {
         },
     },
     methods: {
-        createDirectory() {
-            const directoryName = prompt('Dir name');
-            if (directoryName === null) return;
-            const currentPath = Array.from(this.$store.state.currentPath);
+        async createDirectory() {
+            const { directoryName } = await modalData('modalDirectoryCreate');
+            if (directoryName === '') return;
+            const currentPath = [...this.$store.state.currentPath];
             currentPath.push(directoryName);
             http.post('directory', { path: currentPath.join('/') })
                 .then((response) => {

@@ -1,7 +1,9 @@
-module.exports = {
-    port: 3000,
-    uploadsDirPath: '../uploads',
-    mimeTypesAllowedForDownload: [
-        'image/jpeg',
-    ],
-};
+exports.port = 3000;
+
+exports.uploadsDirPath = '../uploads';
+
+exports.allowedMimeTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+];

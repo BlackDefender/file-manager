@@ -18,6 +18,8 @@
     @import "scss/base/mixins";
     @import "scss/base/reset";
     @import "scss/modules/button";
+    @import "scss/modules/forms";
+    @import "scss/modules/pop-up";
     * {
         box-sizing: border-box;
         margin: 0;
