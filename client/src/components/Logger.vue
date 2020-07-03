@@ -23,7 +23,7 @@ export default {
                 text,
                 status,
             });
-            setTimeout(() => { this.messages.shift(); }, 3000);
+            setTimeout(() => { this.messages.shift(); }, 5000);
         },
     },
     computed: {
@@ -59,6 +59,7 @@ export default {
         padding: 10px;
         border-radius: 5px;
         margin-bottom: 10px;
+        text-align: center;
         &.success{
             background-color: #008000;
         }

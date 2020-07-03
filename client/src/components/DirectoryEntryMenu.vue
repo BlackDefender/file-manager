@@ -46,7 +46,7 @@ export default {
         },
         async remove() {
             const { approve } = await modalData('modalDirentDelete');
-            if (!approve) this.$store.dispatch('removeDirent', this.dirent);
+            if (approve) this.$store.dispatch('removeDirent', this.dirent);
         },
     },
 };

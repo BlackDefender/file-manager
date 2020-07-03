@@ -8,6 +8,7 @@
         <Logger/>
         <TheModalDirectoryCreate/>
         <TheModalDirentDelete/>
+        <TheModalRemoteUpload/>
     </div>
 </template>
 
@@ -18,6 +19,7 @@ import DirectoryInfoAndActions from '../components/DirectoryInfoAndActions.vue';
 import Logger from '../components/Logger.vue';
 import TheModalDirectoryCreate from '../components/TheModalDirectoryCreate.vue';
 import TheModalDirentDelete from '../components/TheModalDirentDelete.vue';
+import TheModalRemoteUpload from '../components/TheModalRemoteUpload.vue';
 
 export default {
     name: 'FileManager',
@@ -31,6 +33,7 @@ export default {
         Logger,
         TheModalDirectoryCreate,
         TheModalDirentDelete,
+        TheModalRemoteUpload,
     },
 };
 </script>

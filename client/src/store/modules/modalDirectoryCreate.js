@@ -9,26 +9,4 @@ const modalDirectoryCreate = modalStoreModule({
     },
 });
 
-/* const modalDirectoryCreate = {
-    namespaced: true,
-    state: () => ({
-        isActive: false,
-        formData: {
-            directoryName: '',
-        },
-    }),
-    mutations: {
-        show(state) {
-            state.formData.directoryName = '';
-            state.isActive = true;
-        },
-        hide(state) {
-            state.isActive = false;
-        },
-        directoryName(state, name) {
-            state.formData.directoryName = name;
-        },
-    },
-}; */
-
 export default modalDirectoryCreate;

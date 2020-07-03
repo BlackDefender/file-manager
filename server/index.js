@@ -104,33 +104,31 @@ app.post('/api/file/upload', (request, response) => {
 });
 
 app.post('/api/file/remote-upload', (request, response) => {
-    if (request.body.url) {
-        console.log(request.body.url);
-        axios({
-            method: 'get',
-            url: decodeURIComponent(request.body.url),
-            responseType: 'stream'
-        })
-            .then(function (response) {
-                const contentType = response.headers['content-type'];
-                if (config.allowedMimeTypes.includes(contentType)) {
-                    const filePath = path.resolve(uploadsDirPath, 'ada_lovelace.jpg');
-                    try {
-                        response.data.pipe(fs.createWriteStream(filePath));
-                    }
-                    catch (e) {
-                        console.log('oops!');
-                    }
-                }
-                //console.log(response);
-                //
-            })
-            .catch((error) => {
-                console.log('this error');
-                console.log(error);
-            });
+    if (!request.body.url) {
+        return sendError(response, new Error('Url needed'));
     }
-    response.send('feature is under construction');
+    const url = decodeURIComponent(request.body.url);
+    const fileName = decodeURIComponent(request.body.fileName);
+    axios({
+        method: 'get',
+        url,
+        responseType: 'stream'
+    })
+        .then(function (axiosResponse) {
+            const contentType = axiosResponse.headers['content-type'];
+            if (!config.allowedMimeTypes.includes(contentType)) {
+                return sendError(response, new Error('File type not allowed'));
+            }
+            const filePath = path.resolve(uploadsDirPath, fileName);
+            try {
+                axiosResponse.data.pipe(fs.createWriteStream(filePath));
+                sendSuccess(response);
+            }
+            catch (e) {
+                sendError(response, new Error(`Can't write file ${fileName}`));
+            }
+        })
+        .catch((error) => sendError(response, error));
 });
 
 app.delete('/api/file', (request, response) => {
